@@ -21,20 +21,17 @@ export default async function DoctorsPage() {
   try {
     // Fetch all doctors across all pages
     let page = 1;
-    let hasMore = true;
-
-    while (hasMore) {
-      const response = await fetchDoctors(page, 100);
-      if (response.success && response.data.length > 0) {
+    const limit = 100;
+    let totalAvailable = Infinity;
+    while ((page - 1) * limit < totalAvailable) {
+      const response = await fetchDoctors(page, limit);
+      if (response.success) {
         doctors.push(...response.data);
-        // If we got less than 100, we've reached the last page
-        hasMore = response.data.length === 100;
+        totalAvailable = response.pagination?.totalAvailable ?? response.data.length;
         page++;
       } else {
-        if (page === 1 && !response.success) {
-          error = response.message || 'Failed to fetch doctors';
-        }
-        hasMore = false;
+        if (page === 1) error = response.message || 'Failed to fetch doctors';
+        break;
       }
     }
   } catch (err) {
