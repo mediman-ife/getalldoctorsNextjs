@@ -1,8 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { fetchDoctors } from '@/services/api';
-import { Doctor, Pagination } from '@/types/doctor';
+import { Doctor } from '@/types/doctor';
 import DoctorCard from '@/components/DoctorCard/DoctorCard';
 import Header from '@/components/Header/Header';
 import styles from './page.module.css';
@@ -12,26 +11,28 @@ export const metadata: Metadata = {
   description: 'Find and book appointments with top doctors in Sri Lanka. Online and clinic consultations available.',
 };
 
-interface PageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-export default async function DoctorsPage({ searchParams }: PageProps) {
-  const resolvedSearchParams = await searchParams;
-  const page = typeof resolvedSearchParams?.page === 'string' ? parseInt(resolvedSearchParams.page) : 1;
-  const limit = 100; // As per request example
-
-  let doctors: Doctor[] = [];
-  let pagination: Pagination | null = null;
+export default async function DoctorsPage() {
+  const doctors: Doctor[] = [];
   let error: string | null = null;
 
   try {
-    const response = await fetchDoctors(page, limit);
-    if (response.success) {
-      doctors = response.data;
-      pagination = response.pagination;
-    } else {
-      error = response.message || 'Failed to fetch doctors';
+    // Fetch all doctors across all pages
+    let page = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await fetchDoctors(page, 100);
+      if (response.success && response.data.length > 0) {
+        doctors.push(...response.data);
+        // If we got less than 100, we've reached the last page
+        hasMore = response.data.length === 100;
+        page++;
+      } else {
+        if (page === 1 && !response.success) {
+          error = response.message || 'Failed to fetch doctors';
+        }
+        hasMore = false;
+      }
     }
   } catch (err) {
     error = 'An error occurred while fetching doctors.';
@@ -51,33 +52,6 @@ export default async function DoctorsPage({ searchParams }: PageProps) {
             <DoctorCard key={doctor._id} doctor={doctor} />
           ))}
         </div>
-
-        {pagination && (
-          <div className={styles.pagination}>
-            <Link
-              href={`/?page=${page - 1}`}
-              className={styles.pageButton}
-              style={{ pointerEvents: page <= 1 ? 'none' : 'auto', opacity: page <= 1 ? 0.5 : 1 }}
-            >
-              Previous
-            </Link>
-
-            <span className={`${styles.pageButton} ${styles.activePage}`}>
-              {page}
-            </span>
-
-            <Link
-              href={`/?page=${page + 1}`}
-              className={styles.pageButton}
-              style={{
-                pointerEvents: doctors.length < limit ? 'none' : 'auto',
-                opacity: doctors.length < limit ? 0.5 : 1
-              }}
-            >
-              Next
-            </Link>
-          </div>
-        )}
       </div>
     </div>
   );
