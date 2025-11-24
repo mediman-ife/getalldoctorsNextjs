@@ -1,0 +1,249 @@
+.main {
+    min-height: 100vh;
+    background: #f8f9fa;
+    padding-bottom: 60px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.backLink {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #666;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: #0066cc;
+}
+
+.profileCard {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+    background: linear-gradient(to right, #f8f9fa, white);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.imageWrapper {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.designation {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 16px;
+}
+
+.badges {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    font-size: 0.9rem;
+    color: #444;
+    font-weight: 500;
+}
+
+.contentGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 40px;
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aboutText {
+    line-height: 1.8;
+    color: #444;
+    white-space: pre-line;
+}
+
+.serviceList {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+}
+
+.serviceList li {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.rightColumn {
+    /* Sticky sidebar on desktop */
+}
+
+.bookingCard {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 100px;
+}
+
+.bookingTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    color: #000000;
+}
+
+.feeRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.feeType {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feeLabel {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.feeDuration {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2px;
+}
+
+.feeAmount {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #0066cc;
+}
+
+.bookButton {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 10px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.bookButton:hover {
+    opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+    .header {
+        flex-direction: row;
+        text-align: left;
+        padding: 40px 60px;
+        gap: 40px;
+    }
+
+    .headerInfo {
+        text-align: left;
+    }
+
+    .badges {
+        justify-content: flex-start;
+    }
+
+    .contentGrid {
+        grid-template-columns: 2fr 1fr;
+    }
+}

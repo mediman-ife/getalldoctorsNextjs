@@ -1,0 +1,95 @@
+.header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 15px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.nav {
+    display: none;
+    /* Hidden on mobile by default, can be toggled if needed */
+    gap: 40px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.navLink {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.navLink:hover {
+    color: #e91e63;
+    /* Pinkish color from logo/screenshot */
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.downloadButton {
+    background-color: #0052cc;
+    /* Blue color from screenshot */
+    color: white;
+    padding: 10px 24px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
+}
+
+.downloadButton:hover {
+    background-color: #003d99;
+}
+
+@media (min-width: 768px) {
+    .nav {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo {
+        height: 32px;
+        /* Smaller logo on mobile */
+    }
+
+    .downloadButton {
+        padding: 8px 16px;
+        /* Smaller button on mobile */
+        font-size: 0.85rem;
+    }
+
+    .container {
+        padding: 0 15px;
+        /* Slightly less padding on mobile */
+    }
+}
