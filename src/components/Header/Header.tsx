@@ -7,7 +7,7 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.container}>
                 <div className={styles.logoContainer}>
-                    <Link href="/">
+                    <Link href="/" prefetch={false}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="https://mediman.life/wp-content/uploads/2025/10/mediman-logo-svg-re.svg"

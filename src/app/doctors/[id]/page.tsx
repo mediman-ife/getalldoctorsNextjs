@@ -111,7 +111,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
         <div className={styles.main}>
             <Header />
             <div className={styles.container}>
-                <Link href="/" className={styles.backLink}>← Back to Doctors</Link>
+                <a href="/" className={styles.backLink}>← Back to Doctors</a>
 
                 <div className={styles.profileCard}>
                     <div className={styles.header}>

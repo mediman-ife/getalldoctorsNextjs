@@ -3,7 +3,7 @@ import React from 'react';
 import { Doctor } from '@/types/doctor';
 import styles from './DoctorCard.module.css';
 import { Video, MapPin } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface DoctorCardProps {
     doctor: Doctor;
@@ -11,23 +11,20 @@ interface DoctorCardProps {
 
 const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
     const { _id, firstName, lastName, designation, profileImage, charges, consultationType } = doctor;
-    const router = useRouter();
 
     const hasOnline = consultationType.includes('ONLINE');
     const hasClinic = consultationType.includes('CLINIC');
 
-    const handleCardClick = () => {
-        router.push(`/doctors/${_id}`);
-    };
-
     return (
-        <div className={styles.card} onClick={handleCardClick}>
+        <a className={styles.card} href={`/doctors/${_id}`}>
             <div className={styles.imageContainer}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={profileImage?.signedUrl || '/placeholder-doctor.png'}
                     alt={`${firstName} ${lastName}`}
                     className={styles.image}
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                         (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Dr';
                     }}
@@ -66,14 +63,11 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
                     )}
                 </div>
 
-                <button className={styles.viewButton} onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(`/doctors/${_id}`);
-                }}>
+                <button type="button" className={styles.viewButton}>
                     View
                 </button>
             </div>
-        </div>
+        </a>
     );
 };
 
