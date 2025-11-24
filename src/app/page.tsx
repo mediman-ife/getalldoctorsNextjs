@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   description: 'Find and book appointments with top doctors in Sri Lanka. Online and clinic consultations available.',
 };
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 600
+
 export default async function DoctorsPage() {
   const doctors: Doctor[] = [];
   let error: string | null = null;

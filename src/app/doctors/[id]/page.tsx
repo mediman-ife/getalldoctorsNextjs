@@ -1,12 +1,40 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { getDoctorProfileInfo, fetchDoctors } from '@/services/api';
 import Header from '@/components/Header/Header';
 import styles from './page.module.css';
 import { Video, MapPin, Globe, Languages, Stethoscope, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 interface PageProps {
     params: Promise<{ id: string }>;
+}
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 3600
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params
+    try {
+        const response = await getDoctorProfileInfo(id)
+        if (response.success) {
+            const d = response.data.doctor
+            const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'
+            return {
+                title: `Dr. ${d.firstName} ${d.lastName} | MediMan`,
+                description: d.designation || 'Find and book appointments with top doctors in Sri Lanka.',
+                alternates: { canonical: `${base}/doctors/${id}` },
+                openGraph: {
+                    title: `Dr. ${d.firstName} ${d.lastName} | MediMan`,
+                    description: d.designation || 'Find and book appointments with top doctors in Sri Lanka.',
+                    url: `${base}/doctors/${id}`,
+                    images: d.profileImage?.signedUrl ? [{ url: d.profileImage.signedUrl }] : undefined,
+                },
+            }
+        }
+    } catch {}
+    return { title: 'Doctor | MediMan' }
 }
 
 // Generate static paths for all doctors at build time
@@ -56,18 +84,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
     }
 
     if (error || !doctor) {
-        return (
-            <div className={styles.main}>
-                <Header />
-                <div className={styles.container}>
-                    <div className={styles.error}>
-                        <h2>Error</h2>
-                        <p>{error || 'Doctor not found'}</p>
-                        <Link href="/" className={styles.backButton}>Back to Doctors</Link>
-                    </div>
-                </div>
-            </div>
-        );
+        return notFound();
     }
 
     const {
@@ -75,6 +92,20 @@ export default async function DoctorProfilePage({ params }: PageProps) {
         about, experience, country, languages, service,
         charges, consultationType
     } = doctor;
+
+    const jsonld = {
+        '@context': 'https://schema.org',
+        '@type': 'Physician',
+        name: `Dr. ${firstName} ${lastName}`,
+        description: designation,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'}/doctors/${id}`,
+        image: profileImage?.signedUrl,
+        medicalSpecialty: service && service.length > 0 ? service : undefined,
+        areaServed: country,
+        offers: consultationType.includes('ONLINE')
+            ? { '@type': 'Offer', price: charges.onlineCharge.amount, priceCurrency: charges.onlineCharge.currency }
+            : undefined,
+    }
 
     return (
         <div className={styles.main}>
@@ -184,6 +215,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
                     </div>
                 </div>
             </div>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }} />
         </div>
     );
 }
