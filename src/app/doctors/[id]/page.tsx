@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { getDoctorProfileInfo, fetchDoctors } from '@/services/api';
+import { getDoctorProfileInfo } from '@/services/api';
 import Header from '@/components/Header/Header';
 import styles from './page.module.css';
 import { Video, MapPin, Globe, Languages, Stethoscope, Clock } from 'lucide-react';
@@ -11,7 +11,8 @@ interface PageProps {
     params: Promise<{ id: string }>;
 }
 
-// Static SSG for doctor pages
+export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
@@ -36,28 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     return { title: 'Doctor | MediMan' }
 }
 
-export async function generateStaticParams() {
-    try {
-        const allDoctors: { _id: string }[] = [];
-        let page = 1;
-        const limit = 100;
-        let totalAvailable = Infinity;
-        while ((page - 1) * limit < totalAvailable) {
-            const response = await fetchDoctors(page, limit);
-            if (response.success) {
-                allDoctors.push(...response.data.map(d => ({ _id: d._id })));
-                totalAvailable = response.pagination?.totalAvailable ?? response.data.length;
-                page++;
-            } else {
-                break;
-            }
-        }
-        return allDoctors.map(d => ({ id: d._id }));
-    } catch (error) {
-        console.error('Error generating static params:', error);
-        return [];
-    }
-}
+// No static params: dynamic routes resolve at request time
 
 // Dynamic route: don’t generate static params to avoid build-time API calls
 
