@@ -1,6 +1,5 @@
 name = "medimandoctor"
 main = "src/worker.js"
-compatibility_date = "2024-07-29"
+compatibility_date = "2025-11-24"
 
-# Tell Wrangler to bundle the static Next.js export (out/) as Worker assets
-assets = { directory = "out" }
+assets = { directory = "out", binding = "ASSETS" }
