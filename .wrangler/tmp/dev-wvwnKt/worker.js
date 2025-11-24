@@ -1,4 +1,4 @@
-// .wrangler/tmp/bundle-cmKiwo/checked-fetch.js
+// .wrangler/tmp/bundle-yiWBUY/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -26,15 +26,21 @@ globalThis.fetch = new Proxy(globalThis.fetch, {
 // src/worker.js
 var worker = {
   async fetch(request, env) {
-    const incoming = new URL(request.url);
-    const base = env.REDIRECT_BASE_URL || env.NEXT_PUBLIC_BASE_URL || "https://doctors.mediman.life";
-    const targetURL = new URL(base);
-    if (incoming.host === targetURL.host) {
-      return new Response("OK", { status: 204 });
-    }
-    targetURL.pathname = incoming.pathname;
-    targetURL.search = incoming.search;
-    return Response.redirect(targetURL.toString(), 301);
+    const url = new URL(request.url);
+    let res = await env.ASSETS.fetch(request);
+    if (res.status !== 404)
+      return res;
+    const htmlUrl = new URL(url);
+    htmlUrl.pathname = htmlUrl.pathname.endsWith(".html") ? htmlUrl.pathname : `${htmlUrl.pathname}.html`;
+    res = await env.ASSETS.fetch(new Request(htmlUrl, request));
+    if (res.status !== 404)
+      return res;
+    const indexUrl = new URL(url);
+    indexUrl.pathname = indexUrl.pathname.endsWith("/") ? `${indexUrl.pathname}index.html` : `${indexUrl.pathname}/index.html`;
+    res = await env.ASSETS.fetch(new Request(indexUrl, request));
+    if (res.status !== 404)
+      return res;
+    return new Response("Not Found", { status: 404 });
   }
 };
 var worker_default = worker;
@@ -79,7 +85,7 @@ var jsonError = async (request, env, _ctx, middlewareCtx) => {
 };
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-cmKiwo/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-yiWBUY/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -108,7 +114,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
   ]);
 }
 
-// .wrangler/tmp/bundle-cmKiwo/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-yiWBUY/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

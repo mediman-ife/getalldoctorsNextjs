@@ -1,14 +1,25 @@
 const worker = {
   async fetch(request, env) {
-    const incoming = new URL(request.url)
-    const base = env.REDIRECT_BASE_URL || env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'
-    const targetURL = new URL(base)
-    if (incoming.host === targetURL.host) {
-      return new Response('OK', { status: 204 })
-    }
-    targetURL.pathname = incoming.pathname
-    targetURL.search = incoming.search
-    return Response.redirect(targetURL.toString(), 301)
+    const url = new URL(request.url);
+
+    let res = await env.ASSETS.fetch(request);
+    if (res.status !== 404) return res;
+
+    const htmlUrl = new URL(url);
+    htmlUrl.pathname = htmlUrl.pathname.endsWith('.html')
+      ? htmlUrl.pathname
+      : `${htmlUrl.pathname}.html`;
+    res = await env.ASSETS.fetch(new Request(htmlUrl, request));
+    if (res.status !== 404) return res;
+
+    const indexUrl = new URL(url);
+    indexUrl.pathname = indexUrl.pathname.endsWith('/')
+      ? `${indexUrl.pathname}index.html`
+      : `${indexUrl.pathname}/index.html`;
+    res = await env.ASSETS.fetch(new Request(indexUrl, request));
+    if (res.status !== 404) return res;
+
+    return new Response('Not Found', { status: 404 });
   },
 };
 

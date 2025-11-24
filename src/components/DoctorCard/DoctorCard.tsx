@@ -18,7 +18,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
     return (
         <a className={styles.card} href={`/doctors/${_id}`}>
             <div className={styles.imageContainer}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {/* eslint-disable-next-line @next/next/no-img-elements */}
                 <img
                     src={profileImage?.signedUrl || '/placeholder-doctor.png'}
                     alt={`${firstName} ${lastName}`}

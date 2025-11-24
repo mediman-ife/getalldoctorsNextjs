@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { fetchDoctors } from '@/services/api'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 3600
+export const dynamic = 'force-static'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'
