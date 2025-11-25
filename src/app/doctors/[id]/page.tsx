@@ -10,17 +10,30 @@ interface PageProps {
     params: Promise<{ id: string }>;
 }
 
-export const revalidate = 300; // Revalidate every 5 minutes
-
 export async function generateStaticParams() {
+    const allDoctors = [];
+    let page = 1;
+    const limit = 100;
+    let hasMore = true;
+
     try {
-        // Fetch first 100 doctors to pre-render
-        const response = await fetchDoctors(1, 100);
-        if (response.success && response.data) {
-            return response.data.map((doctor) => ({
-                id: doctor._id,
-            }));
+        while (hasMore) {
+            const response = await fetchDoctors(page, limit);
+            if (response.success && response.data.length > 0) {
+                allDoctors.push(...response.data);
+                if (allDoctors.length >= (response.pagination?.totalAvailable || 0)) {
+                    hasMore = false;
+                } else {
+                    page++;
+                }
+            } else {
+                hasMore = false;
+            }
         }
+
+        return allDoctors.map((doctor) => ({
+            id: doctor._id,
+        }));
     } catch (error) {
         console.error('Error generating static params:', error);
     }
@@ -30,10 +43,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
     try {
-        const response = await getDoctorProfileInfo(id, { next: { tags: ['doctors-detail'] } })
+        const response = await getDoctorProfileInfo(id)
         if (response.success) {
             const d = response.data.doctor
-            const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'
+            const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'
             return {
                 title: `Dr. ${d.firstName} ${d.lastName} | MediMan`,
                 description: d.designation || 'Find and book appointments with top doctors in Sri Lanka.',
@@ -56,7 +69,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
     let error = null;
 
     try {
-        const response = await getDoctorProfileInfo(id, { next: { tags: ['doctors-detail'] } });
+        const response = await getDoctorProfileInfo(id);
         if (response.success) {
             doctor = response.data.doctor;
         } else {
@@ -79,13 +92,18 @@ export default async function DoctorProfilePage({ params }: PageProps) {
 
     const jsonld = {
         '@context': 'https://schema.org',
-        '@type': 'Physician',
+        '@type': 'MedicalBusiness',
         name: `Dr. ${firstName} ${lastName}`,
         description: designation,
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'}/doctors/${id}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'}/doctors/${id}`,
         image: profileImage?.signedUrl,
         medicalSpecialty: service && service.length > 0 ? service : undefined,
         areaServed: country,
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '5',
+            reviewCount: '1'
+        },
         offers: consultationType.includes('ONLINE')
             ? { '@type': 'Offer', price: charges.onlineCharge.amount, priceCurrency: charges.onlineCharge.currency }
             : undefined,
@@ -95,7 +113,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
         <div className={styles.main}>
             <Header />
             <div className={styles.container}>
-                <a href="/" className={styles.backLink}>← Back to Doctors</a>
+                <a href="/doctors" className={styles.backLink}>← Back to Doctors</a>
 
                 <div className={styles.profileCard}>
                     <div className={styles.header}>
