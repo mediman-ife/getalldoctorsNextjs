@@ -83,3 +83,22 @@
     min-width: 120px;
     text-align: center;
 }
+
+@media (max-width: 768px) {
+    .pagination {
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .pageButton {
+        padding: 8px 16px;
+        min-width: auto;
+        font-size: 0.9rem;
+    }
+
+    .pageInfo {
+        padding: 4px 8px;
+        min-width: auto;
+        font-size: 0.80rem;
+    }
+}
