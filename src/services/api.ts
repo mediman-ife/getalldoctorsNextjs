@@ -2,7 +2,12 @@ import { DoctorsResponse, Doctor } from '@/types/doctor';
 
 // API Configuration from Postman screenshots
 const API_BASE_URL = 'https://prodapi.mediman.life';
-const API_KEY = process.env.NEXT_PUBLIC_MEDIMAN_API_KEY || 'jmziDgOf+BmlBA8CJMkBT1hWAQltr1vh';
+const API_KEY = process.env.NEXT_PUBLIC_MEDIMAN_API_KEY;
+
+// Validate API key is configured
+if (!API_KEY) {
+    throw new Error('NEXT_PUBLIC_MEDIMAN_API_KEY environment variable is required');
+}
 
 // Cache configuration
 const CACHE_TAGS = {
