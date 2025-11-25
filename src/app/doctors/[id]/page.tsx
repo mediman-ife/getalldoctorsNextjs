@@ -1,24 +1,36 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { getDoctorProfileInfo } from '@/services/api';
+import { getDoctorProfileInfo, fetchDoctors } from '@/services/api';
 import Header from '@/components/Header/Header';
 import styles from './page.module.css';
 import { Video, MapPin, Globe, Languages, Stethoscope, Clock } from 'lucide-react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
     params: Promise<{ id: string }>;
 }
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 3600
-export const runtime = 'edge'
+export const revalidate = 300; // Revalidate every 5 minutes
+
+export async function generateStaticParams() {
+    try {
+        // Fetch first 100 doctors to pre-render
+        const response = await fetchDoctors(1, 100);
+        if (response.success && response.data) {
+            return response.data.map((doctor) => ({
+                id: doctor._id,
+            }));
+        }
+    } catch (error) {
+        console.error('Error generating static params:', error);
+    }
+    return [];
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
     try {
-        const response = await getDoctorProfileInfo(id)
+        const response = await getDoctorProfileInfo(id, { next: { tags: ['doctors-detail'] } })
         if (response.success) {
             const d = response.data.doctor
             const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'
@@ -34,13 +46,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
                 },
             }
         }
-    } catch {}
+    } catch { }
     return { title: 'Doctor | MediMan' }
 }
-
-// No static params: dynamic routes resolve at request time
-
-// Dynamic route: don’t generate static params to avoid build-time API calls
 
 export default async function DoctorProfilePage({ params }: PageProps) {
     const { id } = await params;
@@ -48,7 +56,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
     let error = null;
 
     try {
-        const response = await getDoctorProfileInfo(id);
+        const response = await getDoctorProfileInfo(id, { next: { tags: ['doctors-detail'] } });
         if (response.success) {
             doctor = response.data.doctor;
         } else {
