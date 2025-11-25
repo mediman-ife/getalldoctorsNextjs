@@ -25,7 +25,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'
+  const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',

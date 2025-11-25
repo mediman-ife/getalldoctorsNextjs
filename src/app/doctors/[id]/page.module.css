@@ -260,3 +260,10 @@
         grid-template-columns: 2fr 1fr;
     }
 }
+
+@media (max-width: 768px) {
+    .bookButton {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+}
