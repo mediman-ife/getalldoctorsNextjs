@@ -150,9 +150,7 @@
     font-weight: 600;
 }
 
-.rightColumn {
-    /* Sticky sidebar on desktop */
-}
+
 
 .bookingCard {
     background: #fff;
@@ -210,6 +208,7 @@
     display: block;
     width: 100%;
     padding: 16px;
+    padding-top: 20px;
     background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
     color: white;
     border: none;
@@ -217,14 +216,28 @@
     font-weight: 600;
     font-size: 1.1rem;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: all 0.2s ease;
     margin-top: 10px;
     text-align: center;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .bookButton:hover {
-    opacity: 0.9;
+    background: linear-gradient(135deg, #0052a3 0%, #004080 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.2);
+}
+
+.bookingNote {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 12px;
+    line-height: 1.4;
 }
 
 @media (min-width: 768px) {

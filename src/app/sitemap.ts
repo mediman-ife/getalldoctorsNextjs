@@ -1,40 +1,56 @@
-import type { MetadataRoute } from 'next'
-import { fetchDoctors } from '@/services/api'
+import type { MetadataRoute } from 'next';
+import { fetchDoctors, getAllDoctorsForStaticParams } from '@/services/api';
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 3600
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+export const runtime = 'edge';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || 'https://medimandoctor.sugeevanit25.workers.dev'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
+  const now = new Date();
 
-  const items: MetadataRoute.Sitemap = [
-    { url: `${base}/`, lastModified: new Date(), changeFrequency: 'hourly', priority: 0.8 },
-  ]
+  // Main pages
+  const staticPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/doctors`,
+      lastModified: now,
+      changeFrequency: 'hourly',
+      priority: 0.9,
+    },
+  ];
 
   try {
-    const ids: string[] = []
-    let page = 1
-    let hasMore = true
-    while (hasMore) {
-      const res = await fetchDoctors(page, 100)
-      if (res.success && res.data.length > 0) {
-        for (const d of res.data) ids.push(d._id)
-        hasMore = res.data.length === 100
-        page++
-      } else {
-        hasMore = false
-      }
-    }
-    for (const id of ids) {
-      items.push({
-        url: `${base}/doctors/${id}`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.7,
-      })
-    }
-  } catch {}
+    // Fetch all doctors for sitemap
+    const allDoctors = await getAllDoctorsForStaticParams();
+    
+    // Generate doctor profile pages
+    const doctorPages: MetadataRoute.Sitemap = allDoctors.map((doctor) => ({
+      url: `${baseUrl}/doctors/${doctor._id}`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 0.7,
+    }));
 
-  return items
+    // Combine all pages
+    return [...staticPages, ...doctorPages];
+
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    // Return static pages if doctors fetch fails
+    return staticPages;
+  }
 }
+
+// Additional sitemap configuration
+export const metadata = {
+  sitemap: {
+    generateRobotsTxt: true,
+    generateIndexSitemap: false,
+  },
+};

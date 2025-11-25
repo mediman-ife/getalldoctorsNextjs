@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -7,14 +6,14 @@ const Header = () => {
         <header className={styles.header}>
             <div className={styles.container}>
                 <div className={styles.logoContainer}>
-                    <Link href="/" prefetch={false}>
+                    <a href="https://mediman.life" target="_blank" rel="noopener noreferrer">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="https://mediman.life/wp-content/uploads/2025/10/mediman-logo-svg-re.svg"
                             alt="MediMan Logo"
                             className={styles.logo}
                         />
-                    </Link>
+                    </a>
                 </div>
 
                 <nav className={styles.nav}>
