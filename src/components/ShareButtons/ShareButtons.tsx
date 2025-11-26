@@ -19,25 +19,40 @@
  }
 
  export default function ShareButtons({ doctor, profileUrl, availableText }: Props) {
-   const name = `Dr. ${doctor.firstName} ${doctor.lastName}`
-   const specialty = doctor.service?.[0] || doctor.designation || ''
-   const bio = (doctor.about || '').replace(/\s+/g, ' ').trim().slice(0, 180)
-   const image = doctor.profileImage?.signedUrl || `${new URL(profileUrl).origin}/placeholder-doctor.png`
-   const title = `${name}${specialty ? ' – ' + specialty : ''}`
-   const description = `${availableText ? availableText + ' · ' : ''}${bio}`
-   const encodedUrl = encodeURIComponent(profileUrl)
-   const encodedTitle = encodeURIComponent(title)
-   const encodedDesc = encodeURIComponent(description)
-   const encodedText = encodeURIComponent(`${title}\n${description}\n${profileUrl}`)
+  const name = `Dr. ${doctor.firstName} ${doctor.lastName}`
+  const specialty = doctor.service?.[0] || doctor.designation || ''
+  const bio = (doctor.about || '').replace(/\s+/g, ' ').trim().slice(0, 180)
+  const image = doctor.profileImage?.signedUrl || `${new URL(profileUrl).origin}/placeholder-doctor.png`
+  const title = `${name}${specialty ? ', ' + specialty : ''}`
+  const description = `${availableText ? availableText + ' · ' : ''}${bio}`
+  const bookingUrl = 'https://mediman.life/userapp.html'
+  const doctorUrl = profileUrl
+  const shareText = [
+    `Meet ${title} - on MediMan.`,
+    '',
+    'Your trusted healthcare is now just a tap away. MediMan connects you with verified doctors anytime, anywhere — so you no longer need to wait in queues, travel for hours, or struggle to find the right specialist.',
+    '',
+    'With MediMan, you can book appointments, consult by video or audio, receive e-prescriptions, and manage all your health records in one secure app.',
+    '✨ Simple. Fast. Reliable. The way modern healthcare should be.',
+    '',
+    `📲 Connect with ${name} & Book Now: ${bookingUrl}`,
+    '📥 Download the MediMan App Now!',
+    '',
+    `View doctor: ${doctorUrl}`,
+    'MediMan — Your favourite Doctor, Just a Tap Away.'
+  ].join('\n')
+  const encodedUrl = encodeURIComponent(doctorUrl)
+  const encodedQuote = encodeURIComponent(shareText)
+  const encodedText = encodeURIComponent(shareText)
    
    const links = useMemo(() => ({
-     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedTitle}%20${encodedDesc}`,
-     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-     whatsapp: `https://api.whatsapp.com/send?text=${encodedText}`,
-     messengerWeb: `https://www.facebook.com/dialog/send?link=${encodedUrl}&app_id=6628568379&redirect_uri=${encodedUrl}`,
-     messengerDeep: `fb-messenger://share?link=${encodedUrl}`,
-     viber: `viber://forward?text=${encodedText}`
-   }), [encodedUrl, encodedTitle, encodedDesc, encodedText])
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedQuote}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+    whatsapp: `https://api.whatsapp.com/send?text=${encodedText}`,
+    messengerWeb: `https://www.facebook.com/dialog/send?link=${encodedUrl}&app_id=6628568379&redirect_uri=${encodedUrl}`,
+    messengerDeep: `fb-messenger://share?link=${encodedUrl}`,
+    viber: `viber://forward?text=${encodedText}`
+  }), [encodedUrl, encodedText])
  
    const onMessengerClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
@@ -48,15 +63,15 @@
    const onNativeShare = useCallback(async () => {
      if (navigator.share) {
        try {
-         await navigator.share({ title, text: `${title}\n${description}`, url: profileUrl })
+         await navigator.share({ title, text: shareText, url: doctorUrl })
        } catch {}
      } else {
        try {
-         await navigator.clipboard.writeText(profileUrl)
-         alert('Link copied')
+         await navigator.clipboard.writeText(shareText)
+         alert('Message copied')
        } catch {}
      }
-   }, [title, description, profileUrl])
+   }, [shareText, doctorUrl])
  
   return (
     <div className={styles.shareRow}>

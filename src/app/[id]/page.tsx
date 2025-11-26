@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           siteName: 'MediMan',
           locale: 'en_US',
           images: [{
-            url: (doctor.profileImage?.signedUrl || `${baseUrl}/placeholder-doctor.png`),
+            url: (doctor.profileImage?.signedUrl || `${baseUrl}/icon.png`),
             alt: `Dr. ${doctor.firstName} ${doctor.lastName}`,
             width: 1200,
             height: 630,
@@ -86,7 +86,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           card: 'summary_large_image',
           title,
           description,
-          images: [(doctor.profileImage?.signedUrl || `${baseUrl}/placeholder-doctor.png`)],
+          images: [(doctor.profileImage?.signedUrl || `${baseUrl}/icon.png`)],
         },
         robots: {
           index: true,
@@ -188,7 +188,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
             <div className={styles.header}>
               <div className={styles.imageWrapper}>
                 <img
-                  src={profileImage?.signedUrl || '/placeholder-doctor.png'}
+                  src={profileImage?.signedUrl || '/icon.png'}
                   alt={`Dr. ${firstName} ${lastName}${designation ? ' – ' + designation : ''}`}
                   className={styles.image}
                   width={200}
