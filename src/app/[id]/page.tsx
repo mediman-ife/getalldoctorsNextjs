@@ -11,7 +11,7 @@ import ShareButtons from '@/components/ShareButtons/ShareButtons';
 export const revalidate = 300;
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 // Generate static parameters for all doctors
@@ -28,8 +28,8 @@ export async function generateStaticParams() {
 }
 
 // Generate dynamic metadata for SEO
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { id } = params;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
 
   try {
