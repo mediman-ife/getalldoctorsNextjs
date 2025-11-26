@@ -1,0 +1,9 @@
+ .shareRow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+ .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; color: white; }
+ .fb { background: #1877F2; }
+ .li { background: #0A66C2; }
+ .wa { background: #25D366; }
+ .ms { background: #0084FF; }
+ .vi { background: #665CAC; }
+ .og { background: #444; }
+ .icon { width: 16px; height: 16px; }

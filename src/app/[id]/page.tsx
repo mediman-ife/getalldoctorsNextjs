@@ -5,12 +5,13 @@ import { notFound } from 'next/navigation';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import styles from './page.module.css';
+import ShareButtons from '@/components/ShareButtons/ShareButtons';
 
 // ISR configuration - revalidate every 5 minutes
 export const revalidate = 300;
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 // Generate static parameters for all doctors
@@ -27,8 +28,8 @@ export async function generateStaticParams() {
 }
 
 // Generate dynamic metadata for SEO
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const { id } = params;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
 
   try {
@@ -70,12 +71,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           type: 'profile',
           siteName: 'MediMan',
           locale: 'en_US',
-          images: doctor.profileImage?.signedUrl ? [{
-            url: doctor.profileImage.signedUrl,
+          images: [{
+            url: (doctor.profileImage?.signedUrl || `${baseUrl}/placeholder-doctor.png`),
             alt: `Dr. ${doctor.firstName} ${doctor.lastName}`,
             width: 1200,
             height: 630,
-          }] : [],
+          }],
           // @ts-ignore - Next.js types might not explicitly show these but they are valid for type: 'profile'
           firstName: doctor.firstName,
           lastName: doctor.lastName,
@@ -85,7 +86,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           card: 'summary_large_image',
           title,
           description,
-          images: doctor.profileImage?.signedUrl ? [doctor.profileImage.signedUrl] : [],
+          images: [(doctor.profileImage?.signedUrl || `${baseUrl}/placeholder-doctor.png`)],
         },
         robots: {
           index: true,
@@ -138,7 +139,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
     charges, consultationType, gender
   } = doctor;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
 
   // Schema.org structured data for medical professional
   const jsonLd = {
@@ -188,11 +189,11 @@ export default async function DoctorProfilePage({ params }: PageProps) {
               <div className={styles.imageWrapper}>
                 <img
                   src={profileImage?.signedUrl || '/placeholder-doctor.png'}
-                  alt={`Dr. ${firstName} ${lastName}`}
+                  alt={`Dr. ${firstName} ${lastName}${designation ? ' – ' + designation : ''}`}
                   className={styles.image}
                   width={200}
                   height={200}
-                  loading="eager"
+                  loading="lazy"
                 />
               </div>
               <div className={styles.headerInfo}>
@@ -251,6 +252,11 @@ export default async function DoctorProfilePage({ params }: PageProps) {
                     </div>
                   </section>
                 )}
+                <ShareButtons
+                  doctor={{ _id: id, firstName, lastName, designation, service, about, profileImage }}
+                  profileUrl={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/${id}`}
+                  availableText={`Available on MediMan${consultationType?.length ? ' · ' + consultationType.join('/') : ''}`}
+                />
               </div>
 
               {/* Right Column - Booking & Fees */}

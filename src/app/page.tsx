@@ -125,6 +125,28 @@ export default async function Home() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'MedicalBusiness',
+              name: 'MediMan',
+              url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/`,
+              logo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/mediman-logo.png`,
+              sameAs: [
+                'https://www.facebook.com/mediman.life',
+                'https://www.linkedin.com/company/mediman',
+                'https://instagram.com/mediman.life'
+              ],
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'support@mediman.life'
+              }
+            })
+          }}
+        />
       </main>
       <Footer />
     </div>
