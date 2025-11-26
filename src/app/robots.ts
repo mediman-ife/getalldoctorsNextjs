@@ -5,8 +5,8 @@ export const revalidate = 3600;
 export const runtime = 'edge';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
-  
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
+
   return {
     rules: [
       {
