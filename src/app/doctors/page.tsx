@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const response = await fetchDoctors(1, 10);
     const totalCount = response?.pagination?.totalAvailable || 0;
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
-    
+
     return {
       title: `Find Top Doctors | MediMan - ${totalCount > 0 ? totalCount + ' ' : ''}Healthcare Professionals`,
       description: `Browse and connect with ${totalCount > 0 ? totalCount : 'hundreds of'} verified doctors in Sri Lanka. Online and clinic consultations available.`,
@@ -56,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DoctorsPage() {
   let response;
   let error = null;
-  
+
   try {
     response = await fetchDoctors(1, 100);
   } catch (err) {
@@ -84,7 +84,7 @@ export default async function DoctorsPage() {
       item: {
         '@type': 'Physician',
         name: `Dr. ${doctor.firstName} ${doctor.lastName}`,
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'}/doctors/${doctor._id}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'}/${doctor._id}`,
         medicalSpecialty: doctor.service || [],
         address: {
           '@type': 'PostalAddress',
@@ -112,8 +112,8 @@ export default async function DoctorsPage() {
               <p>{error}</p>
             </div>
           ) : (
-            <DoctorsList 
-              initialDoctors={doctors} 
+            <DoctorsList
+              initialDoctors={doctors}
               initialTotal={totalDoctors}
             />
           )}

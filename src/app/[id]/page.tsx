@@ -30,25 +30,25 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
-  
+
   try {
     const response = await getDoctorProfileInfo(id);
     if (response.success) {
       const doctor = response.data.doctor;
       const title = `Dr. ${doctor.firstName} ${doctor.lastName} | ${doctor.designation} | MediMan`;
       const description = `Book appointments with Dr. ${doctor.firstName} ${doctor.lastName}, ${doctor.designation}. ${doctor.about?.substring(0, 150)}${doctor.about && doctor.about.length > 150 ? '...' : ''}`;
-      
+
       return {
         title,
         description,
-        alternates: { canonical: `${baseUrl}/doctors/${id}` },
+        alternates: { canonical: `${baseUrl}/${id}` },
         openGraph: {
           title,
           description,
-          url: `${baseUrl}/doctors/${id}`,
+          url: `${baseUrl}/${id}`,
           type: 'profile',
           siteName: 'MediMan',
-          images: doctor.profileImage?.signedUrl ? [{ 
+          images: doctor.profileImage?.signedUrl ? [{
             url: doctor.profileImage.signedUrl,
             alt: `Dr. ${doctor.firstName} ${doctor.lastName}`,
             width: 400,
@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   } catch (error) {
     console.error('Error generating metadata for doctor profile:', error);
   }
-  
+
   return {
     title: 'Doctor Profile | MediMan',
     description: 'View doctor profile and book appointments.',
@@ -113,14 +113,14 @@ export default async function DoctorProfilePage({ params }: PageProps) {
   } = doctor;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
-  
+
   // Schema.org structured data for medical professional
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MedicalBusiness',
     name: `Dr. ${firstName} ${lastName}`,
     description: designation,
-    url: `${baseUrl}/doctors/${id}`,
+    url: `${baseUrl}/${id}`,
     image: profileImage?.signedUrl,
     medicalSpecialty: service && service.length > 0 ? service : undefined,
     address: {
@@ -227,7 +227,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
               <div className={styles.rightColumn}>
                 <div className={styles.bookingCard}>
                   <h3 className={styles.bookingTitle}>Consultation Fees</h3>
-                  
+
                   {consultationType.includes('ONLINE') && (
                     <div className={styles.feeRow}>
                       <div className={styles.feeType}>
@@ -259,10 +259,10 @@ export default async function DoctorProfilePage({ params }: PageProps) {
                   )}
 
                   <div className={styles.bookingActions}>
-                    <a 
-                      href="https://mediman.life/userapp.html" 
-                      className={styles.bookButton} 
-                      target="_blank" 
+                    <a
+                      href="https://mediman.life/userapp.html"
+                      className={styles.bookButton}
+                      target="_blank"
                       rel="noopener noreferrer"
                     >
                       <Calendar size={16} color="white" />

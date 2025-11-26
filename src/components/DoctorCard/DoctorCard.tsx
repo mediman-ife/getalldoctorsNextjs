@@ -16,7 +16,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
     const hasClinic = consultationType.includes('CLINIC');
 
     return (
-        <a className={styles.card} href={`/doctors/${_id}`}>
+        <a className={styles.card} href={`/${_id}`}>
             <div className={styles.imageContainer}>
                 {/* eslint-disable-next-line @next/next/no-img-elements */}
                 <img

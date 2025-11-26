@@ -85,7 +85,7 @@ export default async function Home() {
       item: {
         '@type': 'Physician',
         name: `Dr. ${doctor.firstName} ${doctor.lastName}`,
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'}/doctors/${doctor._id}`,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life'}/${doctor._id}`,
         medicalSpecialty: doctor.service || [],
         address: {
           '@type': 'PostalAddress',
