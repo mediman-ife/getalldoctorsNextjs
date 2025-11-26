@@ -28,10 +28,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     // Fetch all doctors for sitemap
     const allDoctors = await getAllDoctorsForStaticParams();
-    
+
     // Generate doctor profile pages
     const doctorPages: MetadataRoute.Sitemap = allDoctors.map((doctor) => ({
-      url: `${baseUrl}/doctors/${doctor._id}`,
+      url: `${baseUrl}/${doctor._id}`,
       lastModified: now,
       changeFrequency: 'daily',
       priority: 0.7,

@@ -35,12 +35,33 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const response = await getDoctorProfileInfo(id);
     if (response.success) {
       const doctor = response.data.doctor;
-      const title = `Dr. ${doctor.firstName} ${doctor.lastName} | ${doctor.designation} | MediMan`;
-      const description = `Book appointments with Dr. ${doctor.firstName} ${doctor.lastName}, ${doctor.designation}. ${doctor.about?.substring(0, 150)}${doctor.about && doctor.about.length > 150 ? '...' : ''}`;
+
+      // Construct rich title and description
+      const specialty = doctor.service?.length ? doctor.service[0] : doctor.designation;
+      const title = `Dr. ${doctor.firstName} ${doctor.lastName} - ${specialty} in ${doctor.country} | MediMan`;
+
+      const aboutSnippet = doctor.about
+        ? doctor.about.substring(0, 155).replace(/\s+/g, ' ').trim() + (doctor.about.length > 155 ? '...' : '')
+        : `Book an appointment with Dr. ${doctor.firstName} ${doctor.lastName}.`;
+
+      const description = `Consult Dr. ${doctor.firstName} ${doctor.lastName}, a ${doctor.designation} specializing in ${doctor.service?.join(', ') || specialty} in ${doctor.country}. ${aboutSnippet}`;
+
+      // Generate keywords
+      const keywords = [
+        `Dr. ${doctor.firstName} ${doctor.lastName}`,
+        doctor.designation,
+        ...(doctor.service || []),
+        doctor.country,
+        'MediMan',
+        'Doctor Appointment',
+        'Online Consultation',
+        'Healthcare'
+      ].filter(Boolean);
 
       return {
         title,
         description,
+        keywords,
         alternates: { canonical: `${baseUrl}/${id}` },
         openGraph: {
           title,
@@ -48,18 +69,23 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           url: `${baseUrl}/${id}`,
           type: 'profile',
           siteName: 'MediMan',
+          locale: 'en_US',
           images: doctor.profileImage?.signedUrl ? [{
             url: doctor.profileImage.signedUrl,
             alt: `Dr. ${doctor.firstName} ${doctor.lastName}`,
-            width: 400,
-            height: 400,
-          }] : undefined,
+            width: 1200,
+            height: 630,
+          }] : [],
+          // @ts-ignore - Next.js types might not explicitly show these but they are valid for type: 'profile'
+          firstName: doctor.firstName,
+          lastName: doctor.lastName,
+          gender: doctor.gender,
         },
         twitter: {
           card: 'summary_large_image',
           title,
           description,
-          images: doctor.profileImage?.signedUrl ? [doctor.profileImage.signedUrl] : undefined,
+          images: doctor.profileImage?.signedUrl ? [doctor.profileImage.signedUrl] : [],
         },
         robots: {
           index: true,
@@ -80,7 +106,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   return {
     title: 'Doctor Profile | MediMan',
-    description: 'View doctor profile and book appointments.',
+    description: 'View doctor profile and book appointments on MediMan.',
   };
 }
 
@@ -117,16 +143,20 @@ export default async function DoctorProfilePage({ params }: PageProps) {
   // Schema.org structured data for medical professional
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'MedicalBusiness',
+    '@type': 'Physician',
     name: `Dr. ${firstName} ${lastName}`,
-    description: designation,
+    description: `${designation}. ${about ? about.substring(0, 150) + '...' : ''}`,
     url: `${baseUrl}/${id}`,
     image: profileImage?.signedUrl,
-    medicalSpecialty: service && service.length > 0 ? service : undefined,
+    medicalSpecialty: service?.map(s => ({
+      '@type': 'MedicalSpecialty',
+      name: s
+    })),
     address: {
       '@type': 'PostalAddress',
       addressCountry: country,
     },
+    priceRange: charges.clinicCharge.amount ? `${charges.clinicCharge.currency} ${charges.clinicCharge.amount}` : '$$',
     offers: [
       ...(consultationType.includes('ONLINE') ? [{
         '@type': 'Offer',
