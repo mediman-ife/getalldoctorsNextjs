@@ -252,11 +252,6 @@ export default async function DoctorProfilePage({ params }: PageProps) {
                     </div>
                   </section>
                 )}
-                <ShareButtons
-                  doctor={{ _id: id, firstName, lastName, designation, service, about, profileImage }}
-                  profileUrl={`https://doctors.mediman.life/${id}`}
-                  availableText={`Available on MediMan${consultationType?.length ? ' · ' + consultationType.join('/') : ''}`}
-                />
               </div>
 
               {/* Right Column - Booking & Fees */}
@@ -307,8 +302,11 @@ export default async function DoctorProfilePage({ params }: PageProps) {
                     <p className={styles.bookingNote}>Available on Android and iOS. Book appointments, get e-prescriptions, and manage your health records securely.</p>
                   </div>
                 </div>
-
-
+                <ShareButtons
+                  doctor={{ _id: id, firstName, lastName, designation, service, about, profileImage }}
+                  profileUrl={`https://doctors.mediman.life/${id}`}
+                  availableText={`Available on MediMan${consultationType?.length ? ' · ' + consultationType.join('/') : ''}`}
+                />
               </div>
             </div>
           </div>
