@@ -30,6 +30,8 @@
   const shareText = [
     `Meet ${title} - on MediMan.`,
     '',
+    `View doctor: ${doctorUrl}`,
+    '',
     'Your trusted healthcare is now just a tap away. MediMan connects you with verified doctors anytime, anywhere — so you no longer need to wait in queues, travel for hours, or struggle to find the right specialist.',
     '',
     'With MediMan, you can book appointments, consult by video or audio, receive e-prescriptions, and manage all your health records in one secure app.',
@@ -38,7 +40,7 @@
     `📲 Connect with ${name} & Book Now: ${bookingUrl}`,
     '📥 Download the MediMan App Now!',
     '',
-    `View doctor: ${doctorUrl}`,
+    
     'MediMan — Your favourite Doctor, Just a Tap Away.'
   ].join('\n')
   const encodedUrl = encodeURIComponent(doctorUrl)
