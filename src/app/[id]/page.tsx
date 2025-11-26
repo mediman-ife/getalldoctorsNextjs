@@ -86,7 +86,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
           card: 'summary_large_image',
           title,
           description,
-          images: [(doctor.profileImage?.signedUrl || `${baseUrl}/icon.png`)],
         },
         robots: {
           index: true,
