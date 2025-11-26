@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const response = await fetchDoctors(1, 10);
     const totalCount = response?.pagination?.totalAvailable || 0;
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
+    const baseUrl = 'https://doctors.mediman.life';
 
     return {
       title: `Find Top Doctors | MediMan - ${totalCount > 0 ? totalCount + ' ' : ''}Healthcare Professionals`,
@@ -76,7 +76,7 @@ export default async function DoctorsPage() {
     '@type': 'CollectionPage',
     name: 'MediMan Doctors Directory',
     description: 'Find and book appointments with top doctors in Sri Lanka.',
-    url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/doctors`,
+    url: `https://doctors.mediman.life/doctors`,
     numberOfItems: totalDoctors,
     itemListElement: doctors.map((doctor, index) => ({
       '@type': 'ListItem',
@@ -84,7 +84,7 @@ export default async function DoctorsPage() {
       item: {
         '@type': 'Physician',
         name: `Dr. ${doctor.firstName} ${doctor.lastName}`,
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/${doctor._id}`,
+        url: `https://doctors.mediman.life/${doctor._id}`,
         medicalSpecialty: doctor.service || [],
         address: {
           '@type': 'PostalAddress',

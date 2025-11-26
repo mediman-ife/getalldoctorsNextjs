@@ -30,7 +30,7 @@ export async function generateStaticParams() {
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
+  const baseUrl = 'https://doctors.mediman.life';
 
   try {
     const response = await getDoctorProfileInfo(id);
@@ -139,7 +139,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
     charges, consultationType, gender
   } = doctor;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
+  const baseUrl = 'https://doctors.mediman.life';
 
   // Schema.org structured data for medical professional
   const jsonLd = {
@@ -254,7 +254,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
                 )}
                 <ShareButtons
                   doctor={{ _id: id, firstName, lastName, designation, service, about, profileImage }}
-                  profileUrl={`${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/${id}`}
+                  profileUrl={`https://doctors.mediman.life/${id}`}
                   availableText={`Available on MediMan${consultationType?.length ? ' · ' + consultationType.join('/') : ''}`}
                 />
               </div>
