@@ -29,7 +29,7 @@ export async function generateStaticParams() {
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
 
   try {
     const response = await getDoctorProfileInfo(id);

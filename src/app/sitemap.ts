@@ -6,7 +6,7 @@ export const revalidate = 3600;
 export const runtime = 'edge';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mediman.life';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life';
   const now = new Date();
 
   // Main pages
