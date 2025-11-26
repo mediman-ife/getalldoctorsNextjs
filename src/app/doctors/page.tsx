@@ -103,7 +103,8 @@ export default async function DoctorsPage() {
           <header className={styles.header}>
             <h1 className={styles.title}>Find Your Doctor</h1>
             <p className={styles.subtitle}>
-              {totalDoctors > 0 ? `${totalDoctors} verified doctors` : 'Verified doctors'} available for online and clinic consultations
+              
+             /*  {totalDoctors > 0 ? `${totalDoctors} verified doctors` : 'Verified doctors'} available for online and clinic consultations */
             </p>
           </header>
 
