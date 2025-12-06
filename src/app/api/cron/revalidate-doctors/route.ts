@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
-import { fetchDoctors } from '@/services/api';
+import { fetchDoctors, getAllDoctorsForStaticParams } from '@/services/api';
+import { googleIndexingService } from '@/services/googleIndexing';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
     // Fetch fresh data to ensure cache is warmed up
     const response = await fetchDoctors(1, 100);
     const totalDoctors = response?.pagination?.totalAvailable || 0;
+    const doctors = response?.data || [];
 
     // Revalidate cache tags
     await Promise.all([
@@ -34,6 +36,37 @@ export async function GET(request: NextRequest) {
       revalidateTag('doctors-detail')
     ]);
 
+    // Auto-request Google indexing for all doctor profiles
+    let indexingResults = { successes: 0, failures: 0, indexed: false };
+
+    // Only index if we have doctors and indexing is configured
+    if (doctors.length > 0) {
+      try {
+        // Build URLs for all doctor profiles
+        const doctorUrls = doctors.map((doc: any) => `https://doctors.mediman.life/${doc._id}`);
+
+        // Add main pages
+        const allUrls = [
+          'https://doctors.mediman.life/',
+          'https://doctors.mediman.life/doctors',
+          ...doctorUrls
+        ];
+
+        // Request indexing (this is async and won't block response)
+        const result = await googleIndexingService.batchRequestIndexing(allUrls);
+        indexingResults = {
+          successes: result.successes,
+          failures: result.failures,
+          indexed: true
+        };
+
+        console.log(`✅ Google Indexing: ${result.successes} URLs indexed, ${result.failures} failed`);
+      } catch (indexError) {
+        console.error('Google Indexing error (non-blocking):', indexError);
+        indexingResults.indexed = false;
+      }
+    }
+
     // Return success response
     return NextResponse.json({
       success: true,
@@ -41,7 +74,8 @@ export async function GET(request: NextRequest) {
       totalDoctors,
       timestamp: new Date().toISOString(),
       message: `Successfully revalidated ${totalDoctors} doctors cache`,
-      tags: ['doctors-list', 'doctors-detail']
+      tags: ['doctors-list', 'doctors-detail'],
+      googleIndexing: indexingResults
     });
 
   } catch (error) {
