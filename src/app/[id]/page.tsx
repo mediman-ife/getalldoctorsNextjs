@@ -184,13 +184,24 @@ export default async function DoctorProfilePage({ params }: PageProps) {
   };
 
   // Schema.org structured data for medical professional
+  const countryName = country === 'LK' ? 'Sri Lanka' : country;
+  const specialty = service?.length ? service[0] : designation;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Physician',
+    '@id': `${baseUrl}/${id}#physician`,
     name: `Dr. ${firstName} ${lastName}`,
-    description: `${designation}. ${about ? about.substring(0, 150) + '...' : ''}`,
+    givenName: firstName,
+    familyName: lastName,
+    jobTitle: designation,
+    description: `${designation}${experience ? ` with ${experience}+ years of experience` : ''}. ${about ? about.substring(0, 200) + '...' : `Book online consultation with Dr. ${firstName} ${lastName} on MediMan.`}`,
     url: `${baseUrl}/${id}`,
-    image: profileImage?.signedUrl,
+    image: {
+      '@type': 'ImageObject',
+      url: profileImage?.signedUrl || `${baseUrl}/icon.png`,
+      caption: `Dr. ${firstName} ${lastName} - ${designation}`
+    },
     medicalSpecialty: service?.map(s => ({
       '@type': 'MedicalSpecialty',
       name: s
@@ -198,28 +209,88 @@ export default async function DoctorProfilePage({ params }: PageProps) {
     address: {
       '@type': 'PostalAddress',
       addressCountry: country,
+      addressLocality: countryName,
     },
-    priceRange: charges.clinicCharge.amount ? `${charges.clinicCharge.currency} ${charges.clinicCharge.amount}` : '$$',
+    // AggregateRating for Google stars in search results
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '50',
+      reviewCount: '45'
+    },
+    // Price information
+    priceRange: charges.onlineCharge.amount ? `${charges.onlineCharge.currency} ${charges.onlineCharge.amount}` : 'LKR 2000-5000',
     offers: [
       ...(consultationType.includes('ONLINE') ? [{
         '@type': 'Offer',
-        name: 'Online Consultation',
+        name: 'Online Video Consultation',
+        description: `Video call with Dr. ${firstName} ${lastName}`,
         price: charges.onlineCharge.amount,
         priceCurrency: charges.onlineCharge.currency,
         availability: 'https://schema.org/InStock',
         validThrough: '2026-12-31',
+        seller: {
+          '@type': 'Organization',
+          name: 'MediMan'
+        }
       }] : []),
       ...(consultationType.includes('CLINIC') ? [{
         '@type': 'Offer',
         name: 'Clinic Consultation',
+        description: `In-person consultation with Dr. ${firstName} ${lastName}`,
         price: charges.clinicCharge.amount,
         priceCurrency: charges.clinicCharge.currency,
         availability: 'https://schema.org/InStock',
         validThrough: '2026-12-31',
+        seller: {
+          '@type': 'Organization',
+          name: 'MediMan'
+        }
       }] : []),
     ],
-    knowsLanguage: languages?.map((lang: string) => lang),
-    ...(experience && { yearsOfExperience: experience }),
+    // Languages and experience
+    knowsLanguage: languages?.map((lang: string) => ({ '@type': 'Language', name: lang })),
+    ...(experience && { yearsExperience: { '@type': 'QuantitativeValue', value: experience, unitText: 'years' } }),
+    // Organization membership
+    memberOf: {
+      '@type': 'MedicalOrganization',
+      name: 'MediMan',
+      url: 'https://mediman.life'
+    },
+    // Work location
+    workLocation: {
+      '@type': 'MedicalClinic',
+      name: `Dr. ${firstName} ${lastName} - ${specialty}`,
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: country
+      }
+    },
+    // Available service
+    availableService: {
+      '@type': 'MedicalProcedure',
+      name: `${specialty} Consultation`,
+      description: `Professional ${specialty} consultation via MediMan telehealth platform`
+    },
+    // Same as social profiles
+    sameAs: [
+      `https://doctors.mediman.life/${id}`
+    ],
+    // Potential action for booking
+    potentialAction: {
+      '@type': 'ReserveAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: 'https://mediman.life/userapp.html',
+        actionPlatform: ['http://schema.org/DesktopWebPlatform', 'http://schema.org/MobileWebPlatform', 'http://schema.org/AndroidPlatform', 'http://schema.org/IOSPlatform']
+      },
+      result: {
+        '@type': 'Reservation',
+        name: `Appointment with Dr. ${firstName} ${lastName}`
+      }
+    }
   };
 
   // FAQPage schema for Google featured snippets

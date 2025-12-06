@@ -16,58 +16,61 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
     const hasClinic = consultationType.includes('CLINIC');
 
     return (
-        <a className={styles.card} href={`/${_id}`}>
-            <div className={styles.imageContainer}>
-                {/* eslint-disable-next-line @next/next/no-img-elements */}
-                <img
-                    src={profileImage?.signedUrl || '/placeholder-doctor.png'}
-                    alt={`${firstName} ${lastName}`}
-                    className={styles.image}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Dr';
-                    }}
-                />
-            </div>
-
-            <div className={styles.content}>
-                <div className={styles.info}>
-                    <h3 className={styles.name}>Dr. {firstName} {lastName}</h3>
-                    <p className={styles.designation}>{designation}</p>
+        <article className={styles.card} itemScope itemType="https://schema.org/Physician">
+            <a href={`/${_id}`} className={styles.cardLink} title={`View Dr. ${firstName} ${lastName} - ${designation}`}>
+                <div className={styles.imageContainer}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={profileImage?.signedUrl || '/placeholder-doctor.png'}
+                        alt={`Dr. ${firstName} ${lastName} - ${designation} - Book Online Consultation on MediMan`}
+                        className={styles.image}
+                        loading="lazy"
+                        decoding="async"
+                        itemProp="image"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Dr';
+                        }}
+                    />
                 </div>
 
-                <div className={styles.prices}>
-                    {hasOnline && (
-                        <div className={styles.priceRow}>
-                            <div className={styles.priceLabel}>
-                                <Video size={16} color="#0066cc" />
-                                <span>Online Consultation</span>
-                            </div>
-                            <span className={styles.priceValue}>
-                                {charges.onlineCharge.currency} {charges.onlineCharge.amount}
-                            </span>
-                        </div>
-                    )}
+                <div className={styles.content}>
+                    <div className={styles.info}>
+                        <h3 className={styles.name} itemProp="name">Dr. {firstName} {lastName}</h3>
+                        <p className={styles.designation} itemProp="medicalSpecialty">{designation}</p>
+                    </div>
 
-                    {hasClinic && (
-                        <div className={styles.priceRow}>
-                            <div className={styles.priceLabel}>
-                                <MapPin size={16} color="#0066cc" />
-                                <span>Clinic Consultation</span>
+                    <div className={styles.prices} itemProp="priceRange">
+                        {hasOnline && (
+                            <div className={styles.priceRow}>
+                                <div className={styles.priceLabel}>
+                                    <Video size={16} color="#0066cc" />
+                                    <span>Online Consultation</span>
+                                </div>
+                                <span className={styles.priceValue}>
+                                    {charges.onlineCharge.currency} {charges.onlineCharge.amount}
+                                </span>
                             </div>
-                            <span className={styles.priceValue}>
-                                {charges.clinicCharge.currency} {charges.clinicCharge.amount}
-                            </span>
-                        </div>
-                    )}
+                        )}
+
+                        {hasClinic && (
+                            <div className={styles.priceRow}>
+                                <div className={styles.priceLabel}>
+                                    <MapPin size={16} color="#0066cc" />
+                                    <span>Clinic Consultation</span>
+                                </div>
+                                <span className={styles.priceValue}>
+                                    {charges.clinicCharge.currency} {charges.clinicCharge.amount}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    <button type="button" className={styles.viewButton}>
+                        View
+                    </button>
                 </div>
-
-                <button type="button" className={styles.viewButton}>
-                    View
-                </button>
-            </div>
-        </a>
+            </a>
+        </article>
     );
 };
 

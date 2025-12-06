@@ -151,16 +151,19 @@ export default async function Home() {
               '@type': 'MedicalBusiness',
               name: 'MediMan',
               url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/`,
-              logo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/mediman-logo.png`,
+              logo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://doctors.mediman.life'}/icon.png`,
               sameAs: [
-                'https://www.facebook.com/mediman.life',
-                'https://www.linkedin.com/company/mediman',
-                'https://instagram.com/mediman.life'
+                'https://www.facebook.com/medimanlife/',
+                'https://www.instagram.com/mediman_life/',
+                'https://www.linkedin.com/company/105617168/',
+                'https://www.youtube.com/@mediman'
               ],
               contactPoint: {
                 '@type': 'ContactPoint',
                 contactType: 'customer support',
-                email: 'support@mediman.life'
+                telephone: '+94-11-466-8668',
+                email: 'support@mediman.life',
+                availableLanguage: ['English', 'Sinhala', 'Tamil']
               }
             })
           }}

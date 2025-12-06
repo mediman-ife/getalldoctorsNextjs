@@ -496,14 +496,44 @@ export default function RootLayout({
     ]
   }
 
+  // Speakable schema for voice search (Google Assistant, Alexa, Siri)
+  const speakableJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'MediMan - Book Doctors Online in Sri Lanka',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'h2', '.speakable-content', 'main p:first-of-type']
+    },
+    url: base,
+    mainEntity: {
+      '@type': 'MedicalBusiness',
+      name: 'MediMan Telehealth',
+      description: 'Book trusted doctors for video consultations or clinic visits. MediMan is Sri Lanka\'s premier telehealth app with 49+ verified doctors across 15+ specialties.',
+    }
+  }
+
   return (
     <html lang="en">
       <head>
         <meta name="theme-color" content="#0052cc" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        {/* Google Maps link for local SEO */}
+
+        {/* Core Web Vitals: Preconnect to external domains */}
+        <link rel="preconnect" href="https://prod-mediman.s3.amazonaws.com" />
+        <link rel="preconnect" href="https://prodapi.mediman.life" />
+        <link rel="dns-prefetch" href="https://prod-mediman.s3.amazonaws.com" />
+        <link rel="dns-prefetch" href="https://prodapi.mediman.life" />
+
+        {/* Core Web Vitals: Preload critical fonts */}
+        <link rel="preload" href="/icon.png" as="image" type="image/png" />
+
+        {/* Canonical URL */}
         <link rel="canonical" href={base} />
+
+        {/* AEO: Structured data for AI assistants */}
+        <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
@@ -514,6 +544,7 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aeoFaqJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableJsonLd) }} />
       </body>
     </html>
   );
