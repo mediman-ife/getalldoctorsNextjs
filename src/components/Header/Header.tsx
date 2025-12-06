@@ -19,6 +19,7 @@ const Header = () => {
                 <nav className={styles.nav}>
                     <a href="https://mediman.life/" className={styles.navLink}>Home</a>
                     <a href="https://mediman.life/doctor/" className={styles.navLink}>Doctor</a>
+                    <a href="https://doctors.mediman.life/" className={`${styles.navLink} ${styles.activeNavLink}`}>Available Doctors</a>
                     <a href="https://mediman.life/faq/" className={styles.navLink}>FAQ</a>
                     <a href="https://mediman.life/contact/" className={styles.navLink}>Contact</a>
                 </nav>

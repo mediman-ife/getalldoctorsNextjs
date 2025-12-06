@@ -44,7 +44,8 @@
     transition: color 0.2s;
 }
 
-.navLink:hover {
+.navLink:hover,
+.activeNavLink {
     color: #e91e63;
     /* Pinkish color from logo/screenshot */
 }

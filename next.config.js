@@ -3,9 +3,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+
   experimental: {
     // Enable ISR optimization
     // isrMemoryCacheSize: 0, // Removed as it's not recognized in this version
