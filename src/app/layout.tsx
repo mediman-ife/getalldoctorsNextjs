@@ -21,19 +21,21 @@ export const metadata: Metadata = {
   description: "Find your favourite doctors, get e-prescriptions, manage appointments and followups, and keep your medical records securely in one app. Book trusted doctors in Sri Lanka for video or in-clinic consultations.",
   keywords: [
     // === CORE BRAND ===
-    'MediMan', 'MediMan App', 'MediMan Sri Lanka', 'MediMan Doctor App',
+    'MediMan', 'MediMan App', 'MediMan Sri Lanka', 'MediMan Doctor App', 'MediMan Telehealth',
 
     // === TELEHEALTH / TELEMEDICINE ===
     'Telehealth Sri Lanka', 'Telemedicine Sri Lanka', 'Telemedicine App',
     'Online Doctor Consultation', 'Video Consultation Doctor', 'Virtual Doctor',
     'Online Healthcare', 'Digital Healthcare Sri Lanka', 'Remote Doctor Consultation',
     'Talk to Doctor Online', 'Chat with Doctor', 'Online Medical Consultation',
+    'Virtual Healthcare', 'Remote Healthcare', 'Digital Health Platform',
 
     // === DOCTOR BOOKING ===
     'Book Doctor Online', 'E-Channeling Sri Lanka', 'Doctor Appointment Booking',
     'Find Doctor Near Me', 'Best Doctors Sri Lanka', 'Top Doctors Sri Lanka',
     'Doctor Appointment App', 'Book Appointment Online', 'Same Day Doctor Appointment',
     'Instant Doctor Consultation', 'Doctor on Demand', '24/7 Doctor',
+    'Best Doctor App 2024', 'Top Healthcare App 2024',
 
     // === ALL MEDICAL SPECIALTIES ===
     'Ophthalmologist', 'Eye Doctor', 'Eye Specialist', 'LASIK Doctor',
@@ -49,12 +51,15 @@ export const metadata: Metadata = {
     'General Physician', 'Family Doctor', 'GP Doctor', 'General Practitioner',
     'Internal Medicine', 'Gastroenterologist', 'Pulmonologist', 'Urologist',
     'Endocrinologist', 'Diabetes Doctor', 'Thyroid Doctor', 'Hormone Specialist',
+    'Ayurvedic Doctor', 'Ayurveda Treatment', 'Homeopathy Doctor',
 
     // === COMMON MEDICAL CONDITIONS ===
     'Fever Treatment', 'Cold and Flu Doctor', 'COVID Doctor', 'Diabetes Consultation',
     'Blood Pressure Doctor', 'Hypertension Treatment', 'Back Pain Doctor',
     'Migraine Treatment', 'Allergy Doctor', 'Asthma Doctor', 'Arthritis Treatment',
     'Knee Pain Doctor', 'Shoulder Pain Treatment', 'Sports Injury Doctor',
+    'Weight Loss Doctor', 'Obesity Treatment', 'PCOD Treatment', 'Infertility Doctor',
+    'Hair Loss Treatment', 'Skin Problem Doctor', 'Stomach Pain Doctor',
 
     // === HEALTHCARE SERVICES ===
     'E-Prescription', 'Digital Prescription', 'Online Prescription',
@@ -68,6 +73,12 @@ export const metadata: Metadata = {
     'Doctors Kurunegala', 'Doctors Anuradhapura', 'Doctors Ratnapura',
     'Hospital Colombo', 'Clinic Colombo', 'Medical Center Sri Lanka',
 
+    // === GLOBAL CITIES (UAE, UK, Australia) ===
+    'Doctors Dubai', 'Doctors Abu Dhabi', 'Doctors Sharjah', 'Telehealth UAE',
+    'Doctors London', 'Doctors Manchester', 'Telehealth UK', 'NHS Alternative',
+    'Doctors Melbourne', 'Doctors Sydney', 'Telehealth Australia',
+    'Doctors Singapore', 'Doctors Malaysia', 'Doctors Maldives',
+
     // === ACTION KEYWORDS ===
     'Consult Doctor Now', 'Get Medical Advice', 'Ask Doctor Online',
     'Find Specialist', 'Book Health Checkup', 'Get Second Opinion',
@@ -75,7 +86,8 @@ export const metadata: Metadata = {
 
     // === COMPETITOR ALTERNATIVES ===
     'Doc990 Alternative', 'oDoc Alternative', 'MyDoctor Alternative',
-    'Best Doctor App Sri Lanka', 'Top Healthcare App Sri Lanka'
+    'Best Doctor App Sri Lanka', 'Top Healthcare App Sri Lanka',
+    'Practo Alternative', 'Lybrate Alternative', 'Apollo 247 Alternative'
   ],
   authors: [{ name: 'MediMan Life (PVT) Ltd' }],
   creator: 'MediMan Life (PVT) Ltd',

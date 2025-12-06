@@ -9,29 +9,51 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
+      // Default rule - Allow all bots full access
       {
         userAgent: '*',
         allow: '/',
-        disallow: [
-          '/api/',
-          '/private/',
-          '/admin/',
-          '/_next/',
-          '/static/',
-        ],
+        disallow: ['/private/', '/admin/'],
       },
-      // Search Engine Bots
+      // Major Search Engine Bots - Full Access
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/api/'],
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/',
+      },
+      {
+        userAgent: 'Googlebot-News',
+        allow: '/',
+      },
+      {
+        userAgent: 'Googlebot-Video',
+        allow: '/',
       },
       {
         userAgent: 'Bingbot',
         allow: '/',
-        disallow: ['/api/'],
       },
-      // AI Bots - Allow full crawling for AI assistants
+      {
+        userAgent: 'Slurp',
+        allow: '/',
+      },
+      {
+        userAgent: 'DuckDuckBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Baiduspider',
+        allow: '/',
+      },
+      {
+        userAgent: 'YandexBot',
+        allow: '/',
+      },
+      // === AI BOTS - FULL ACCESS FOR ALL ===
+      // OpenAI
       {
         userAgent: 'GPTBot',
         allow: '/',
@@ -41,6 +63,20 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
       {
+        userAgent: 'OAI-SearchBot',
+        allow: '/',
+      },
+      // Google AI
+      {
+        userAgent: 'Google-Extended',
+        allow: '/',
+      },
+      {
+        userAgent: 'Gemini',
+        allow: '/',
+      },
+      // Anthropic/Claude
+      {
         userAgent: 'Claude-Web',
         allow: '/',
       },
@@ -49,13 +85,15 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
       {
-        userAgent: 'Google-Extended',
+        userAgent: 'ClaudeBot',
         allow: '/',
       },
+      // Perplexity
       {
         userAgent: 'PerplexityBot',
         allow: '/',
       },
+      // Apple
       {
         userAgent: 'Applebot',
         allow: '/',
@@ -64,12 +102,57 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Applebot-Extended',
         allow: '/',
       },
+      // Other AI
       {
         userAgent: 'CCBot',
         allow: '/',
       },
       {
         userAgent: 'cohere-ai',
+        allow: '/',
+      },
+      {
+        userAgent: 'Diffbot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Bytespider',
+        allow: '/',
+      },
+      {
+        userAgent: 'YouBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Meta-ExternalAgent',
+        allow: '/',
+      },
+      {
+        userAgent: 'Meta-ExternalFetcher',
+        allow: '/',
+      },
+      {
+        userAgent: 'FacebookBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'LinkedInBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Twitterbot',
+        allow: '/',
+      },
+      {
+        userAgent: 'WhatsApp',
+        allow: '/',
+      },
+      {
+        userAgent: 'Slackbot',
+        allow: '/',
+      },
+      {
+        userAgent: 'TelegramBot',
         allow: '/',
       },
     ],
