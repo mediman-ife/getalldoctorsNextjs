@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     // === CORE BRAND ===
     'MediMan', 'MediMan App', 'MediMan Sri Lanka', 'MediMan Doctor App', 'MediMan Telehealth',
 
-    // === TELEHEALTH / TELEMEDICINE ===
+    // === TELEHEALTH / TELEMEDICINES ===
     'Telehealth Sri Lanka', 'Telemedicine Sri Lanka', 'Telemedicine App',
     'Online Doctor Consultation', 'Video Consultation Doctor', 'Virtual Doctor',
     'Online Healthcare', 'Digital Healthcare Sri Lanka', 'Remote Doctor Consultation',
