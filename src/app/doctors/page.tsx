@@ -70,6 +70,26 @@ export default async function DoctorsPage() {
   const currentPage = response?.pagination?.currentPage || 1;
   const totalPages = Math.ceil(totalDoctors / 100);
 
+  // BreadcrumbList structured data
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://doctors.mediman.life/'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'All Doctors',
+        item: 'https://doctors.mediman.life/doctors'
+      }
+    ]
+  };
+
   // Schema.org structured data for SEO
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -103,8 +123,7 @@ export default async function DoctorsPage() {
           <header className={styles.header}>
             <h1 className={styles.title}>Find Your Doctor</h1>
             <p className={styles.subtitle}>
-              
-             /*  {totalDoctors > 0 ? `${totalDoctors} verified doctors` : 'Verified doctors'} available for online and clinic consultations */
+              {totalDoctors > 0 ? `${totalDoctors} verified doctors` : 'Verified doctors'} available for online and clinic consultations
             </p>
           </header>
 
@@ -121,6 +140,10 @@ export default async function DoctorsPage() {
         </div>
 
         {/* Schema.org structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

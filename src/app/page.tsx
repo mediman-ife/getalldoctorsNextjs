@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'MediMan | Healthcare. Anytime. Anywhere. | Book Doctor Appointments Online',
       description: 'Find your favourite doctors, get e-prescriptions, manage appointments and followups, and keep your medical records securely in one app. Download MediMan App Now!',
-      keywords: ['MediMan', 'Doctor Booking', 'Sri Lanka Doctors', 'Online Consultation', 'E-Channeling', 'Telehealth', 'Family Care', 'Medical Records'],
+      keywords: ['MediMan', 'Doctor Booking Sri Lanka', 'Sri Lanka Doctors', 'Online Doctor Consultation Sri Lanka', 'E-Channeling Sri Lanka', 'Telehealth', 'Family Care', 'Medical Records', 'Video Consultation', 'Clinic Consultation', 'Book Doctor Appointment', 'Find Doctors Sri Lanka', 'Healthcare App'],
       alternates: { canonical: `${baseUrl}/` },
       openGraph: {
         title: 'MediMan | Healthcare. Anytime. Anywhere.',
@@ -71,6 +71,20 @@ export default async function Home() {
   // const currentPage = response?.pagination?.currentPage || 1;
   // const totalPages = Math.ceil(totalDoctors / 100);
 
+  // BreadcrumbList structured data
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://doctors.mediman.life/'
+      }
+    ]
+  };
+
   // Schema.org structured data for SEO
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -121,6 +135,10 @@ export default async function Home() {
         </div>
 
         {/* Schema.org structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -29,12 +29,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Fetch all doctors for sitemap
     const allDoctors = await getAllDoctorsForStaticParams();
 
-    // Generate doctor profile pages
+    // Generate doctor profile pages with high priority for telehealth SEO
     const doctorPages: MetadataRoute.Sitemap = allDoctors.map((doctor) => ({
       url: `${baseUrl}/${doctor._id}`,
       lastModified: now,
       changeFrequency: 'daily',
-      priority: 0.7,
+      priority: 0.85, // High priority for individual doctor profiles
     }));
 
     // Combine all pages

@@ -20,6 +20,7 @@ export default function robots(): MetadataRoute.Robots {
           '/static/',
         ],
       },
+      // Search Engine Bots
       {
         userAgent: 'Googlebot',
         allow: '/',
@@ -29,6 +30,47 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Bingbot',
         allow: '/',
         disallow: ['/api/'],
+      },
+      // AI Bots - Allow full crawling for AI assistants
+      {
+        userAgent: 'GPTBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'ChatGPT-User',
+        allow: '/',
+      },
+      {
+        userAgent: 'Claude-Web',
+        allow: '/',
+      },
+      {
+        userAgent: 'Anthropic-AI',
+        allow: '/',
+      },
+      {
+        userAgent: 'Google-Extended',
+        allow: '/',
+      },
+      {
+        userAgent: 'PerplexityBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Applebot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Applebot-Extended',
+        allow: '/',
+      },
+      {
+        userAgent: 'CCBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'cohere-ai',
+        allow: '/',
       },
     ],
     sitemap: [`${baseUrl}/sitemap.xml`],

@@ -37,26 +37,48 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     if (response.success) {
       const doctor = response.data.doctor;
 
-      // Construct rich title and description
+      // Construct SEO-optimized title targeting Google searches
       const specialty = doctor.service?.length ? doctor.service[0] : doctor.designation;
-      const title = `Dr. ${doctor.firstName} ${doctor.lastName} - ${specialty} in ${doctor.country} | MediMan`;
+      const countryName = doctor.country === 'LK' ? 'Sri Lanka' : doctor.country;
+      const experienceText = doctor.experience ? `${doctor.experience}+ Years Experience` : '';
+
+      // High-impact title for Google ranking
+      const title = `Dr. ${doctor.firstName} ${doctor.lastName} | ${specialty} | ${countryName} | Book Online`;
+
+      // Rich meta description with call-to-action
+      const consultationTypes = doctor.consultationType?.map((t: string) =>
+        t === 'ONLINE' ? 'Video Consultation' : 'Clinic Visit'
+      ).join(' & ') || 'Consultation';
 
       const aboutSnippet = doctor.about
-        ? doctor.about.substring(0, 155).replace(/\s+/g, ' ').trim() + (doctor.about.length > 155 ? '...' : '')
-        : `Book an appointment with Dr. ${doctor.firstName} ${doctor.lastName}.`;
+        ? doctor.about.substring(0, 120).replace(/\s+/g, ' ').trim() + '...'
+        : '';
 
-      const description = `Consult Dr. ${doctor.firstName} ${doctor.lastName}, a ${doctor.designation} specializing in ${doctor.service?.join(', ') || specialty} in ${doctor.country}. ${aboutSnippet}`;
+      const description = `Book ${consultationTypes} with Dr. ${doctor.firstName} ${doctor.lastName}, ${doctor.designation}${experienceText ? ` with ${experienceText}` : ''} in ${countryName}. ${aboutSnippet} Consult now on MediMan.`;
 
-      // Generate keywords
+      // Comprehensive keywords for SEO
       const keywords = [
+        // Doctor name variations
         `Dr. ${doctor.firstName} ${doctor.lastName}`,
+        `Dr ${doctor.firstName} ${doctor.lastName}`,
+        `Doctor ${doctor.firstName} ${doctor.lastName}`,
+        // Specialty keywords
         doctor.designation,
         ...(doctor.service || []),
-        doctor.country,
+        // Location-specific
+        `${specialty} ${countryName}`,
+        `${specialty} Online`,
+        `Best ${specialty} ${countryName}`,
+        `Top ${specialty} ${countryName}`,
+        // Telehealth keywords
+        'Online Doctor Consultation',
+        'Video Consultation Doctor',
+        'Book Doctor Online',
+        'Telehealth Sri Lanka',
         'MediMan',
-        'Doctor Appointment',
-        'Online Consultation',
-        'Healthcare'
+        // Action keywords
+        `Book ${specialty} Appointment`,
+        `Consult ${specialty} Online`,
       ].filter(Boolean);
 
       return {
@@ -141,6 +163,26 @@ export default async function DoctorProfilePage({ params }: PageProps) {
 
   const baseUrl = 'https://doctors.mediman.life';
 
+  // BreadcrumbList structured data
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: `Dr. ${firstName} ${lastName}`,
+        item: `${baseUrl}/${id}`
+      }
+    ]
+  };
+
   // Schema.org structured data for medical professional
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -165,7 +207,7 @@ export default async function DoctorProfilePage({ params }: PageProps) {
         price: charges.onlineCharge.amount,
         priceCurrency: charges.onlineCharge.currency,
         availability: 'https://schema.org/InStock',
-        validThrough: '2025-12-31',
+        validThrough: '2026-12-31',
       }] : []),
       ...(consultationType.includes('CLINIC') ? [{
         '@type': 'Offer',
@@ -173,9 +215,100 @@ export default async function DoctorProfilePage({ params }: PageProps) {
         price: charges.clinicCharge.amount,
         priceCurrency: charges.clinicCharge.currency,
         availability: 'https://schema.org/InStock',
-        validThrough: '2025-12-31',
+        validThrough: '2026-12-31',
       }] : []),
     ],
+    knowsLanguage: languages?.map((lang: string) => lang),
+    ...(experience && { yearsOfExperience: experience }),
+  };
+
+  // FAQPage schema for Google featured snippets
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `How can I book an appointment with Dr. ${firstName} ${lastName}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `You can book an appointment with Dr. ${firstName} ${lastName} through the MediMan app. Download MediMan on Android or iOS, search for the doctor, select your preferred consultation type (${consultationType.join(' or ')}), and choose an available time slot.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `What is the consultation fee of Dr. ${firstName} ${lastName}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Dr. ${firstName} ${lastName}'s consultation fees are: ${consultationType.includes('ONLINE') ? `Online Consultation: ${charges.onlineCharge.currency} ${charges.onlineCharge.amount} (${charges.onlineSlotDuration} minutes)` : ''}${consultationType.includes('ONLINE') && consultationType.includes('CLINIC') ? ', ' : ''}${consultationType.includes('CLINIC') ? `Clinic Visit: ${charges.clinicCharge.currency} ${charges.clinicCharge.amount}` : ''}.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `What are Dr. ${firstName} ${lastName}'s specializations?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Dr. ${firstName} ${lastName} is a ${designation} ${service?.length ? `specializing in ${service.join(', ')}` : ''}${experience ? ` with ${experience} years of experience` : ''}${languages?.length ? `. The doctor speaks ${languages.join(', ')}` : ''}.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: `Does Dr. ${firstName} ${lastName} offer online consultations?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: consultationType.includes('ONLINE')
+            ? `Yes, Dr. ${firstName} ${lastName} offers online video consultations through the MediMan app. You can consult from the comfort of your home for ${charges.onlineCharge.currency} ${charges.onlineCharge.amount}.`
+            : `Dr. ${firstName} ${lastName} currently offers clinic consultations only. Visit the clinic for an in-person consultation.`
+        }
+      }
+    ]
+  };
+
+  // HowTo schema for booking process
+  const howToJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: `How to Book an Appointment with Dr. ${firstName} ${lastName}`,
+    description: `Step-by-step guide to book a ${consultationType.includes('ONLINE') ? 'video' : 'clinic'} consultation with Dr. ${firstName} ${lastName} on MediMan`,
+    totalTime: 'PT3M',
+    estimatedCost: {
+      '@type': 'MonetaryAmount',
+      currency: charges.onlineCharge.currency || 'LKR',
+      value: charges.onlineCharge.amount || charges.clinicCharge.amount
+    },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Download MediMan App',
+        text: 'Download the MediMan app from Google Play Store or Apple App Store.',
+        url: 'https://mediman.life/userapp.html'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Search for the Doctor',
+        text: `Search for "Dr. ${firstName} ${lastName}" or browse by specialty "${service?.[0] || designation}".`
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Select Consultation Type',
+        text: `Choose your preferred consultation type: ${consultationType.join(' or ')}.`
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Pick a Time Slot',
+        text: 'Select an available date and time from the doctor\'s schedule.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Confirm Booking',
+        text: 'Complete payment and receive instant confirmation. You\'re all set!'
+      }
+    ]
   };
 
   return (
@@ -315,7 +448,19 @@ export default async function DoctorProfilePage({ params }: PageProps) {
         {/* Schema.org structured data */}
         <script
           type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
         />
       </main>
       <Footer />
