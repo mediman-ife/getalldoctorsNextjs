@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   description: "Find your favourite doctors, get e-prescriptions, manage appointments and followups, and keep your medical records securely in one app. Book trusted doctors in Sri Lanka for video or in-clinic consultations.",
   keywords: [
-    // === CORE BRAND ===
+    // === CORE BRANDs ===
     'MediMan', 'MediMan App', 'MediMan Sri Lanka', 'MediMan Doctor App', 'MediMan Telehealth',
 
     // === TELEHEALTH / TELEMEDICINES ===
