@@ -120,12 +120,32 @@ export default async function DoctorsPage() {
       <Header />
       <main className={styles.main}>
         <div className={styles.container}>
-          <header className={styles.header}>
-            <h1 className={styles.title}>Find Your Doctor</h1>
-            <p className={styles.subtitle}>
-              {totalDoctors > 0 ? `${totalDoctors} verified doctors` : 'Verified doctors'} available for online and clinic consultations
-            </p>
-          </header>
+          <div className={styles.heroSection}>
+            <div className={styles.headerContent}>
+              <h1 className={styles.title}>Your Doctor Is Just a Click Away</h1>
+              <p className={styles.description}>
+                Explore verified specialists available for online and in-clinic consultations across Sri Lanka.<br />
+                Choose from multiple specialties, transparent fees, and trusted professionals — all in one secure platform.
+              </p>
+
+              <div className={styles.featureList}>
+                <div className={styles.featureItem}>
+                  <span className={styles.icon}>✔</span> Verified professionals
+                </div>
+                <div className={styles.featureItem}>
+                  <span className={styles.icon}>✔</span> Secure consultations
+                </div>
+                <div className={styles.featureItem}>
+                  <span className={styles.icon}>✔</span> Nationwide access
+                </div>
+              </div>
+
+              <p className={styles.ctaText}>
+                👉 Your care starts with the right doctor. 💙<br />
+                Because timely care makes all the difference.
+              </p>
+            </div>
+          </div>
 
           {error ? (
             <div className={styles.error}>

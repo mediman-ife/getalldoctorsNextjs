@@ -28,8 +28,14 @@ export async function generateStaticParams() {
 }
 
 // Generate dynamic metadata for SEO
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
+
+  if (id === 'favicon.ico') {
+    return { title: 'Not Found' };
+  }
+
+  console.log(`[generateMetadata] Generating metadata for ID: ${id}`);
   const baseUrl = 'https://doctors.mediman.life';
 
   try {
@@ -133,9 +139,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
+
+
 // Server component for doctor profile page
 export default async function DoctorProfilePage({ params }: PageProps) {
   const { id } = await params;
+
+  // Prevent favicon.ico from triggering a doctor fetch
+  if (id === 'favicon.ico') {
+    return notFound();
+  }
+
+  console.log(`[DoctorProfilePage] Rendering profile for ID: ${id}`);
   let doctor = null;
   let error = null;
 
