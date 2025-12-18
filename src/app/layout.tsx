@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import MobileAppBanner from "@/components/MobileAppBanner/MobileAppBanner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -143,6 +144,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://doctors.mediman.life',
+  },
+  itunes: {
+    appId: '6751712281', // Production App ID
+    appArgument: 'mediman://doctors',
   },
 };
 
@@ -549,6 +554,7 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
+        <MobileAppBanner />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(medicalWebPageJsonLd) }} />

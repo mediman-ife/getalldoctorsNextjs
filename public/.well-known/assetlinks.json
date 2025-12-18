@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mediman.patient",
+      "sha256_cert_fingerprints": [
+        "CC:91:9E:4D:4F:4C:73:BE:B6:92:6A:B2:8A:C1:3D:7A:4B:A2:32:26:AC:08:7E:A6:7D:C3:CA:71:DC:B3:D9:83"
+      ]
+    }
+  }
+]

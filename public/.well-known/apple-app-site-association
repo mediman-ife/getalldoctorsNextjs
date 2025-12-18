@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "65932TQ539.com.mediman.patient",
+        "paths": [
+          "/",
+          "/*"
+        ]
+      }
+    ]
+  }
+}
