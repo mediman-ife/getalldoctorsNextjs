@@ -39,11 +39,14 @@ export async function GET(request: NextRequest) {
     // Auto-request Google indexing for all doctor profiles
     let indexingResults = { successes: 0, failures: 0, indexed: false };
 
+    // Fetch ALL doctors for indexing, not just the first page
+    const allDoctorsForIndexing = await getAllDoctorsForStaticParams();
+
     // Only index if we have doctors and indexing is configured
-    if (doctors.length > 0) {
+    if (allDoctorsForIndexing.length > 0) {
       try {
         // Build URLs for all doctor profiles
-        const doctorUrls = doctors.map((doc: any) => `https://doctors.mediman.life/${doc._id}`);
+        const doctorUrls = allDoctorsForIndexing.map((doc: any) => `https://doctors.mediman.life/${doc._id}`);
 
         // Add main pages
         const allUrls = [

@@ -1,5 +1,8 @@
+"use client";
+
 import { NextRequest, NextResponse } from 'next/server';
 import { googleIndexingService } from '@/services/googleIndexing';
+import { getAllDoctorsForStaticParams } from '@/services/api';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,7 +11,7 @@ export const dynamic = 'force-dynamic';
  * This can be called when new doctors are added
  * 
  * POST /api/google-index
- * Body: { urls: string[] } or { doctorId: string }
+ * Body: { urls: string[] } or { doctorId: string } or { indexAllDoctors: true }
  */
 export async function POST(request: NextRequest) {
     try {
@@ -51,7 +54,7 @@ export async function POST(request: NextRequest) {
         // Option 3: Index main pages only
         if (body.indexMainPages) {
             const result = await googleIndexingService.indexMainPages();
-            return NextResponse.json({
+            NextResponse.json({
                 success: true,
                 successes: result.successes,
                 failures: result.failures,
@@ -59,8 +62,30 @@ export async function POST(request: NextRequest) {
             });
         }
 
+        // Option 4: Index ALL doctors (Bulk)
+        if (body.indexAllDoctors) {
+            const allDoctors = await getAllDoctorsForStaticParams();
+            const doctorUrls = allDoctors.map((doc: any) => `https://doctors.mediman.life/${doc._id}`);
+
+            // Add main pages too
+            const allUrls = [
+                'https://doctors.mediman.life/',
+                'https://doctors.mediman.life/doctors',
+                ...doctorUrls
+            ];
+
+            const result = await googleIndexingService.batchRequestIndexing(allUrls);
+            return NextResponse.json({
+                success: true,
+                message: `Initiated indexing for ${allUrls.length} URLs`,
+                successes: result.successes,
+                failures: result.failures,
+                timestamp: new Date().toISOString()
+            });
+        }
+
         return NextResponse.json(
-            { error: 'Bad Request', message: 'Provide doctorId, urls array, or indexMainPages flag' },
+            { error: 'Bad Request', message: 'Provide doctorId, urls array, indexAllDoctors, or indexMainPages flag' },
             { status: 400 }
         );
 
@@ -84,7 +109,8 @@ export async function GET() {
         endpoints: {
             indexDoctor: 'POST { doctorId: "string" }',
             indexUrls: 'POST { urls: ["url1", "url2"] }',
-            indexMainPages: 'POST { indexMainPages: true }'
+            indexMainPages: 'POST { indexMainPages: true }',
+            indexAllDoctors: 'POST { indexAllDoctors: true }'
         },
         timestamp: new Date().toISOString()
     });
