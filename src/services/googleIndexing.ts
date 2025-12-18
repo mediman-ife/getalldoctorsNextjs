@@ -1,3 +1,4 @@
+import 'server-only';
 import { google } from 'googleapis';
 import * as fs from 'fs';
 import * as path from 'path';
