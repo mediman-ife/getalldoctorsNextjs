@@ -551,6 +551,9 @@ export default function RootLayout({
 
         {/* AEO: Structured data for AI assistants */}
         <meta name="robots" content="max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+        {/* Ahrefs Analytics */}
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="yQ9YsnxSx9wAKtmDXAdFPg" async></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
